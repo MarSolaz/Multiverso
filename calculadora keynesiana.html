@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadoras Keynesianas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        .calculator {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .calculator label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .calculator input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .calculator button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .calculator button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadoras Keynesianas</h1>
+
+    <div class="calculator">
+        <h2>Función de Consumo (C)</h2>
+        <p>𝐶 = 𝑎 + 𝑏𝑌</p>
+        <p>Donde:</p>
+        <ul>
+            <li>𝐶 es el consumo.</li>
+            <li>𝑌 es el ingreso disponible.</li>
+            <li>𝑎 es el consumo autónomo, que representa el consumo mínimo incluso si el ingreso es cero.</li>
+            <li>𝑏 es la propensión marginal a consumir (PMC), que muestra cuánto del ingreso adicional se destina al consumo.</li>
+        </ul>
+        <label for="consumo-income">Ingreso Disponible:</label>
+        <input type="number" id="consumo-income">
+        <label for="consumo-autonomo">Consumo Autónomo:</label>
+        <input type="number" id="consumo-autonomo">
+        <label for="propension-consumir">Propensión Marginal a Consumir:</label>
+        <input type="number" id="propension-consumir">
+        <button onclick="calcularConsumo()">Calcular</button>
+        <p class="result" id="resultadoConsumo"></p>
+    </div>
+
+    <div class="calculator">
+        <h2>Función de Ahorro (S)</h2>
+        <p>𝑆 = −𝑎 + (1 − 𝑏)𝑌</p>
+        <p>Donde:</p>
+        <ul>
+            <li>𝑆 es el ahorro.</li>
+            <li>𝑌 es el ingreso disponible.</li>
+            <li>𝑎 es el consumo autónomo.</li>
+            <li>𝑏 es la propensión marginal a consumir.</li>
+        </ul>
+        <label for="ahorro-income">Ingreso Disponible:</label>
+        <input type="number" id="ahorro-income">
+        <label for="ahorro-autonomo">Consumo Autónomo:</label>
+        <input type="number" id="ahorro-autonomo">
+        <label for="ahorro-propension">Propensión Marginal a Consumir:</label>
+        <input type="number" id="ahorro-propension">
+        <button onclick="calcularAhorro()">Calcular</button>
+        <p class="result" id="resultadoAhorro"></p>
+    </div>
+
+    <div class="calculator">
+        <h2>Función de Inversión (I)</h2>
+        <p>𝐼 = 𝐼0 + 𝐼1𝑟</p>
+        <p>Donde:</p>
+        <ul>
+            <li>𝐼 es la inversión total.</li>
+            <li>𝐼0 es la inversión autónoma, independiente de la tasa de interés.</li>
+            <li>𝐼1 es la sensibilidad de la inversión a la tasa de interés.</li>
+            <li>𝑟 es la tasa de interés.</li>
+        </ul>
+        <label for="inversion-autonomo">Inversión Autónoma:</label>
+        <input type="number" id="inversion-autonomo">
+        <label for="inversion-sensibilidad">Sensibilidad de la Inversión:</label>
+        <input type="number" id="inversion-sensibilidad">
+        <label for="inversion-tasa">Tasa de Interés (%):</label>
+        <input type="number" id="inversion-tasa">
+        <button onclick="calcularInversion()">Calcular</button>
+        <p class="result" id="resultadoInversion"></p>
+    </div>
+    <div class="calculator">
+        <h2>Multiplicador (K)</h2>
+        <p>𝐾 = 1 / (1 - 𝑏)</p>
+        <p>Donde:</p>
+        <ul>
+            <li>𝐾 es el multiplicador.</li>
+            <li>𝑏 es la propensión marginal a consumir (PMC).</li>
+        </ul>
+        <label for="propension-marginal">Propensión Marginal a Consumir (b):</label>
+        <input type="number" id="propension-marginal">
+        <button onclick="calcularMultiplicador()">Calcular</button>
+        <p class="result" id="resultadoMultiplicador"></p>
+    </div>
+
+    <div class="calculator">
+        <h2>Demanda Agregada (Y)</h2>
+        <p>𝑌 = 𝐶 + 𝐼 + 𝐺 + 𝑁𝑋</p>
+        <p>Donde:</p>
+        <ul>
+            <li>𝑌 es la demanda agregada.</li>
+            <li>𝐶 es el consumo.</li>
+            <li>𝐼 es la inversión.</li>
+            <li>𝐺 es el gasto gubernamental.</li>
+            <li>𝑁𝑋 es el saldo neto de exportaciones.</li>
+        </ul>
+        <label for="consumo-demanda">Consumo (C):</label>
+        <input type="number" id="consumo-demanda">
+        <label for="inversion-demanda">Inversión (I):</label>
+        <input type="number" id="inversion-demanda">
+        <label for="gasto-gubernamental">Gasto Gubernamental (G):</label>
+        <input type="number" id="gasto-gubernamental">
+        <label for="neto-exportaciones">Saldo Neto de Exportaciones (NX):</label>
+        <input type="number" id="neto-exportaciones">
+        <button onclick="calcularDemanda()">Calcular</button>
+        <p class="result" id="resultadoDemanda"></p>
+    </div>
+
+    <script>
+        // Función para calcular el consumo
+        function calcularConsumo() {
+            var income = parseFloat(document.getElementById('consumo-income').value);
+            var autonomo = parseFloat(document.getElementById('consumo-autonomo').value);
+            var propension = parseFloat(document.getElementById('propension-consumir').value);
+            var consumo = autonomo + propension * income;
+            document.getElementById('resultadoConsumo').innerText = "Consumo: " + consumo.toFixed(2);
+        }
+
+        // Función para calcular el ahorro
+        function calcularAhorro() {
+            var income = parseFloat(document.getElementById('ahorro-income').value);
+            var autonomo = parseFloat(document.getElementById('ahorro-autonomo').value);
+            var propension = parseFloat(document.getElementById('ahorro-propension').value);
+            var consumo = autonomo + propension * income;
+            var ahorro = income - consumo;
+            document.getElementById('resultadoAhorro').innerText = "Ahorro: " + ahorro.toFixed(2);
+        }
+
+        // Función para calcular la inversión
+        function calcularInversion() {
+            var autonomo = parseFloat(document.getElementById('inversion-autonomo').value);
+            var sensibilidad = parseFloat(document.getElementById('inversion-sensibilidad').value);
+            var tasa = parseFloat(document.getElementById('inversion-tasa').value);
+            var inversion = autonomo + sensibilidad * tasa;
+            document.getElementById('resultadoInversion').innerText = "Inversión: " + inversion.toFixed(2);
+        }
+
+        // Función para calcular el multiplicador
+        function calcularMultiplicador() {
+            var propension = parseFloat(document.getElementById('propension-marginal').value);
+            var multiplicador = 1 / (1 - propension);
+            document.getElementById('resultadoMultiplicador').innerText = "Multiplicador: " + multiplicador.toFixed(2);
+        }
+
+        // Función para calcular la demanda agregada
+        function calcularDemanda() {
+            var consumo = parseFloat(document.getElementById('consumo-demanda').value);
+            var inversion = parseFloat(document.getElementById('inversion-demanda').value);
+            var gasto = parseFloat(document.getElementById('gasto-gubernamental').value);
+            var neto = parseFloat(document.getElementById('neto-exportaciones').value);
+            var demanda = consumo + inversion + gasto + neto;
+            document.getElementById('resultadoDemanda').innerText = "Demanda Agregada: " + demanda.toFixed(2);
+        }
+    </script>
+</body>
+</html>

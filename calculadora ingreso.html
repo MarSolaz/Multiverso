@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Variación del Ingreso</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.0/math.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Variación del Ingreso</h2>
+        <label for="variacion-gasto">Variación del Gasto:</label>
+        <input type="text" id="variacion-gasto" placeholder="Ejemplo: 100 * 0.2">
+        <label for="propension-consumir">Propensión Marginal a Consumir:</label>
+        <input type="text" id="propension-consumir" placeholder="Ejemplo: 0.5">
+        <button onclick="calcularVariacion()">Calcular</button>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        function calcularVariacion() {
+            var variacionGasto = document.getElementById('variacion-gasto').value;
+            var propensionConsumir = document.getElementById('propension-consumir').value;
+
+            try {
+                var resultado = math.evaluate(variacionGasto) * (1 / (1 - propensionConsumir));
+                document.getElementById('resultado').innerHTML = "<p>Variación del Ingreso: " + resultado.toFixed(2) + "</p>";
+            } catch (error) {
+                document.getElementById('resultado').innerHTML = "<p>Error en la entrada</p>";
+            }
+        }
+    </script>
+</body>
+</html>

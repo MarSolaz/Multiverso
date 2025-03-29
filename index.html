@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>dmls_multiverso</title>
+    <style>
+        body {
+            text-align: center;
+            font-size: 30px;
+            font-family: 'Franklin Gothic Medium';
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('cerebro.jpg');
+            /* Cambia 'cerebro.jpg' por la ruta de tu imagen de fondo */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .neuron {
+            display: inline-block;
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.5);
+            /* Color de fondo semi-transparente */
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .neuron:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Color de fondo más brillante al pasar el mouse */
+        }
+
+        .big-image {
+            max-width: 250px;
+            max-height: 250px;
+            position: absolute;
+            z-index: 2;
+            pointer-events: none; /* Para que no interfiera con los eventos del ratón */
+            transition: opacity 0.3s ease; /* Agregar transición de opacidad */
+        }
+
+        .button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            /* Color de fondo del botón */
+            color: #000000;
+            /* Color del texto del botón */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1;
+            /* Asegura que el botón esté sobre la neurona */
+            display: none;
+            /* Los botones están ocultos inicialmente */
+        }
+
+        .neuron:hover .button {
+            display: block;
+            /* Mostrar el botón al pasar el mouse sobre la neurona */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="content">
+        <!-- Neuronas -->
+        <div class="neuron" data-url="salariovital.html" data-image-src="salario.png"></div>
+        <div class="neuron" data-url="musiquita2.html" data-image-src="jukebox.png"></div>
+        <div class="neuron" data-url="bio2.html" data-image-src="biocal.png"></div>
+        <div class="neuron" data-url="tiktok.html" data-image-src="orac.png"></div>
+        <div class="neuron" data-url="https://www.instagram.com/antanoeditora/" data-image-src="antaño.png"></div>
+        <div class="neuron" data-url="pacmanmotosierra.html" data-image-src="pacman.png"></div>
+        <div class="neuron" data-url="calculadora ingreso.html" data-image-src="dificultad.png"></div>
+        <div class="neuron" data-url="index.html" data-image-src="dificultad.png"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const margin = 50; // Margen de distancia con los límites de la ventana
+
+            const neurons = document.querySelectorAll('.neuron');
+            let currentImage;
+
+            neurons.forEach(neuron => {
+                const x = Math.random() * (window.innerWidth - margin * 2 - 100) + margin; // Limita la dispersión al ancho de la ventana menos el margen y el tamaño de la neurona
+                const y = Math.random() * (window.innerHeight - margin * 2 - 100) + margin; // Limita la dispersión al alto de la ventana menos el margen y el tamaño de la neurona
+                neuron.style.left = `${x}px`;
+                neuron.style.top = `${y}px`;
+
+                neuron.addEventListener('mouseenter', function () {
+                    const imageSrc = neuron.dataset.imageSrc;
+                    const image = document.createElement('img');
+                    image.src = imageSrc;
+                    image.classList.add('big-image');
+                    document.body.appendChild(image);
+
+                    // Ajustar la posición de la imagen grande para que esté dentro de los límites de la ventana
+                    const rect = neuron.getBoundingClientRect();
+                    const imageRect = image.getBoundingClientRect();
+                    const newX = Math.min(Math.max(rect.left + rect.width / 2 - imageRect.width / 2, margin), window.innerWidth - margin - imageRect.width);
+                    const newY = Math.min(Math.max(rect.top + rect.height / 2 - imageRect.height / 2, margin), window.innerHeight - margin - imageRect.height);
+                    image.style.left = `${newX}px`;
+                    image.style.top = `${newY}px`;
+
+                    // Mostrar la imagen con una pequeña pausa para que se aplique la transición de opacidad
+                    image.style.opacity = 1;
+                    
+                    currentImage = image;
+                });
+
+                neuron.addEventListener('mouseleave', function () {
+                    if (currentImage) {
+                        // Ocultar la imagen con transición de opacidad
+                        currentImage.style.opacity = 0;
+                        // Eliminar la imagen después de completar la transición
+                        setTimeout(function () {
+                            document.body.removeChild(currentImage);
+                            currentImage = null;
+                        }, 300); // Tiempo de transición: 0.3s
+                    }
+                });
+
+                // Agregar evento de clic a la neurona para redirigir a la URL indicada
+                neuron.addEventListener('click', function () {
+                    const url = neuron.dataset.url;
+                    window.location.href = url;
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

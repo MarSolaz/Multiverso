@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕹️ Estudiar vs Motosierra 🕹️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: white;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-top: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00, 0 0 40px #00ff00, 0 0 50px #00ff00, 0 0 60px #00ff00, 0 0 70px #00ff00, 0 0 80px #00ff00;
+        }
+
+        canvas {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+
+        button {
+            font-size: 24px;
+            margin-top: 10px;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4CAF50;
+        }
+
+        #muteButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+            background-color: transparent;
+            border: none;
+            color: black;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>🕹️ Estudiar vs Motosierra 🕹️</h1>
+    <h2>-en proceso-</h2>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <button id="restartButton" style="display: none;">Reiniciar Juego</button>
+    <button id="muteButton">🔊</button>
+
+    <script>
+        var canvas = document.getElementById("gameCanvas");
+        var ctx = canvas.getContext("2d");
+
+        var pacmanImg = new Image();
+        pacmanImg.src = "pacman2.png";
+        var motosierraImg = new Image();
+        motosierraImg.src = "motosierra.png";
+        var bookImg = new Image();
+        bookImg.src = "hoja.png";
+        var heartImg = new Image();
+        heartImg.src = "heart.png";
+
+        var CHARACTER_SIZE = 50;
+        var PACMAN_SPEED = 7;
+        var ENEMY_SPEED = 2;
+
+        var pacman = { x: 200, y: 200, lives: 3 };
+        var motosierra = { x: 50, y: 50 };
+        var books = [];
+        for (var i = 0; i < 15; i++) {
+            var bookX = Math.random() * (canvas.width - CHARACTER_SIZE);
+            var bookY = Math.random() * (canvas.height - CHARACTER_SIZE);
+            books.push({ x: bookX, y: bookY, eaten: false });
+        }
+
+        var audio = new Audio('arcades.mp3');
+        audio.loop = true;
+        audio.volume = 0.5;
+        audio.play();
+
+        document.getElementById("muteButton").addEventListener("click", function() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById("muteButton").textContent = "🔊";
+            } else {
+                audio.pause();
+                document.getElementById("muteButton").textContent = "🔇";
+            }
+        });
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.drawImage(pacmanImg, pacman.x, pacman.y, CHARACTER_SIZE, CHARACTER_SIZE);
+            ctx.drawImage(motosierraImg, motosierra.x, motosierra.y, CHARACTER_SIZE * 2, CHARACTER_SIZE * 2);
+
+            books.forEach(function(book) {
+                if (!book.eaten) {
+                    ctx.drawImage(bookImg, book.x, book.y, CHARACTER_SIZE, CHARACTER_SIZE);
+                }
+            });
+
+            for (var i = 0; i < pacman.lives; i++) {
+                ctx.drawImage(heartImg, i * CHARACTER_SIZE, 0, CHARACTER_SIZE, CHARACTER_SIZE);
+            }
+
+            if (pacman.lives <= 0) {
+                ctx.font = "50px Arial";
+                ctx.fillStyle = "red";
+                ctx.fillText("¡AFUEeeRAaa!", canvas.width / 2 - 80, canvas.height / 2);
+                document.getElementById("restartButton").style.display = "block";
+            }
+        }
+
+        function handleKey(keyCode) {
+            switch (keyCode) {
+                case 37: // Left arrow
+                    pacman.x -= PACMAN_SPEED;
+                    break;
+                case 38: // Up arrow
+                    pacman.y -= PACMAN_SPEED;
+                    break;
+                case 39: // Right arrow
+                    pacman.x += PACMAN_SPEED;
+                    break;
+                case 40: // Down arrow
+                    pacman.y += PACMAN_SPEED;
+                    break;
+            }
+
+            checkCollisions();
+            draw();
+        }
+
+        function checkCollisions() {
+            if (isCollision(pacman, motosierra)) {
+                pacman.lives--;
+                if (pacman.lives <= 0) {
+                    return;
+                }
+                pacman.x = 200;
+                pacman.y = 200;
+            }
+
+            for (var i = 0; i < books.length; i++) {
+                if (!books[i].eaten && isCollision(pacman, books[i])) {
+                    books[i].eaten = true;
+                }
+            }
+        }
+
+        function isCollision(obj1, obj2) {
+            return obj1.x < obj2.x + CHARACTER_SIZE &&
+                obj1.x + CHARACTER_SIZE > obj2.x &&
+                obj1.y < obj2.y + CHARACTER_SIZE &&
+                obj1.y + CHARACTER_SIZE > obj2.y;
+        }
+
+        function updateMotosierra() {
+            if (pacman.x < motosierra.x) {
+                motosierra.x -= ENEMY_SPEED;
+            } else {
+                motosierra.x += ENEMY_SPEED;
+            }
+
+            if (pacman.y < motosierra.y) {
+                motosierra.y -= ENEMY_SPEED;
+            } else {
+                motosierra.y += ENEMY_SPEED;
+            }
+        }
+
+        canvas.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            handleTouch(event.touches[0].clientX, event.touches[0].clientY);
+        });
+
+        function handleTouch(touchX, touchY) {
+            if (touchX < canvas.width / 2) {
+                pacman.x -= PACMAN_SPEED;
+            } else {
+                pacman.x += PACMAN_SPEED;
+            }
+
+            if (touchY < canvas.height / 2) {
+                pacman.y -= PACMAN_SPEED;
+            } else {
+                pacman.y += PACMAN_SPEED;
+            }
+
+            checkCollisions();
+            draw();
+        }
+
+        document.addEventListener("keydown", function(event) {
+            handleKey(event.keyCode);
+        });
+
+        document.getElementById("restartButton").addEventListener("click", function() {
+            restartGame();
+        });
+
+        function restartGame() {
+            pacman = { x: 200, y: 200, lives: 3 };
+            motosierra = { x: 50, y: 50 };
+            books = [];
+            for (var i = 0; i < 15; i++) {
+                var bookX = Math.random() * (canvas.width - CHARACTER_SIZE);
+                var bookY = Math.random() * (canvas.height - CHARACTER_SIZE);
+                books.push({ x: bookX, y: bookY, eaten: false });
+            }
+            document.getElementById("restartButton").style.display = "none";
+            draw();
+        }
+
+        function gameLoop() {
+            updateMotosierra();
+            checkCollisions();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>

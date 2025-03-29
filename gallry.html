@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galería de Ilustraciones</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css"/>
+  <style>
+    .slick-slide img {
+      max-width: 600px; /* Tamaño máximo de la imagen central */
+      height: auto;
+      margin: 0 auto; /* Centrar la imagen */
+    }
+
+    .slick-slide {
+      opacity: 0.5; /* Opacidad de las imágenes laterales */
+      transition: opacity 0.3s ease;
+    }
+
+    .slick-center {
+      opacity: 1; /* La imagen central es completamente visible */
+    }
+
+    .slick-prev, .slick-next {
+      font-size: 30px;
+      line-height: 1;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .slick-prev {
+      left: 10px;
+    }
+
+    .slick-next {
+      right: 10px;
+    }
+
+    .slick-slide:hover {
+      opacity: 0.8; /* Al pasar el mouse, las imágenes laterales son más visibles */
+    }
+  </style>
+</head>
+<body>
+  <div class="gallery">
+    <div class="slider">
+      <div><img src="biocal.png" alt="Ilustración 1"></div>
+      <div><img src="llena.PNG" alt="Ilustración 2"></div>
+      <div><img src="caldero.jpg" alt="Ilustración 3"></div>
+      <!-- Agrega más imágenes aquí -->
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('.slider').slick({
+        slidesToShow: 3, // Mostrar 3 imágenes a la vez
+        centerMode: true, // Centrar la imagen principal
+        focusOnSelect: true, // Permitir hacer clic en las imágenes laterales para cambiar la imagen principal
+        autoplay: true,
+        autoplaySpeed: 2000,
+        dots: true,
+        infinite: true,
+        speed: 500,
+        fade: true,
+        cssEase: 'linear',
+        prevArrow: '<button type="button" class="slick-prev">&#10094;</button>',
+        nextArrow: '<button type="button" class="slick-next">&#10095;</button>'
+      });
+    });
+  </script>
+</body>
+</html>

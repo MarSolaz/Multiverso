@@ -1,0 +1,54 @@
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+}
+
+h1 {
+    margin: 0;
+}
+
+#startButton, #nextButton, #restartButton {
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#startButton {
+    background-color: #008CBA;
+    color: white;
+}
+
+#nextButton {
+    background-color: #FFA500;
+    color: white;
+}
+
+#restartButton {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+#questionContainer {
+    margin: 20px 0;
+}
+
+#options {
+    margin: 20px 0;
+}

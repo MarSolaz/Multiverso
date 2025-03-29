@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oráculo de Cocina</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7; /* Fondo lindo */
+    }
+
+    header {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #333;
+    }
+
+    h2 {
+      font-size: 18px;
+      color: #666;
+    }
+
+    .container {
+      text-align: center;
+      margin-top: 50px;
+      position: relative;
+    }
+
+    #videoContainer {
+      display: none;
+      margin-top: 20px;
+      width: 100%;
+      max-width: 320px;
+      height: 770px; /* Ajusta la altura según sea necesario */
+      margin: 0 auto;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
+
+    .button-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      outline: none;
+      display: block;
+      margin: 0 auto;
+    }
+
+    button img {
+      border-radius: 50%; /* Para hacer el botón redondeado */
+      width: 300px;
+      height: 300px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Oráculo de Cocina</h1>
+    <h4>por @majitodankow22</h4>
+    <h2>¿No sabés qué cocinar? Te proponemos una receta al azar:</h2>
+  </header>
+  <div class="container">
+    <div id="videoContainer">
+      <!-- El video se cargará aquí -->
+    </div>
+    <div class="button-container" id="buttonContainer">
+      <button id="btnRandomRecipe" onclick="loadRandomVideo()">
+        <img src="caldero.jpg" alt="Botón">
+      </button>
+    </div>
+  </div>
+  <script>
+    // Lista de enlaces de TikTok
+    var tiktokLinks = [
+      "https://www.tiktok.com/@majitodankow22/video/7332314384963865861",
+      "https://www.tiktok.com/@majitodankow22/video/7314378859279928581",
+      "https://www.tiktok.com/@majitodankow22/video/7318196967899696390",
+      "https://www.tiktok.com/@majitodankow22/video/7357123318861876485",
+      "https://www.tiktok.com/@majitodankow22/video/7346002220539858182",
+      "https://www.tiktok.com/@majitodankow22/video/7341554749705080069",
+      "https://www.tiktok.com/@majitodankow22/video/7337498581647101190",
+      "https://www.tiktok.com/@majitodankow22/video/7322873493492681989",
+      "https://www.tiktok.com/@majitodankow22/video/7322686701233507589",
+      "https://www.tiktok.com/@majitodankow22/video/7318196967899696390",
+      "https://www.tiktok.com/@majitodankow22/video/7315945212747058438",
+      "https://www.tiktok.com/@majitodankow22/video/7312639496665713926",
+      "https://www.tiktok.com/@majitodankow22/video/7308935804858961157",
+      "https://www.tiktok.com/@majitodankow22/video/7305473304486317318",
+      "https://www.tiktok.com/@majitodankow22/video/7303191319638199557",
+      "https://www.tiktok.com/@majitodankow22/video/7300010545833430277",
+      "https://www.tiktok.com/@majitodankow22/video/7297436123075185926",
+      "https://www.tiktok.com/@majitodankow22/video/7294845267944148229",
+      "https://www.tiktok.com/@majitodankow22/video/7292220646300388613",
+      "https://www.tiktok.com/@majitodankow22/video/7289284118456683781",
+      "https://www.tiktok.com/@majitodankow22/video/7286262235716979973",
+      "https://www.tiktok.com/@majitodankow22/video/7283584014152158469",
+      "https://www.tiktok.com/@majitodankow22/video/7280973702492114182",
+      "https://www.tiktok.com/@majitodankow22/video/7278372512549932294",
+
+
+
+      // Agrega más enlaces aquí...
+    ];
+
+ 
+    // Función para cargar un video de TikTok al azar
+function loadRandomVideo() {
+  var randomIndex = Math.floor(Math.random() * tiktokLinks.length);
+  var randomLink = tiktokLinks[randomIndex];
+  var videoId = getVideoId(randomLink);
+  var embedUrl = "https://www.tiktok.com/embed/v2/" + videoId;
+  var iframe = document.createElement("iframe");
+  iframe.src = embedUrl;
+  iframe.setAttribute("allow", "autoplay; encrypted-media"); // Permitir reproducción automática
+  document.getElementById("videoContainer").style.display = "block"; // Mostrar contenedor de video
+  document.getElementById("videoContainer").innerHTML = ""; // Limpiar contenido anterior
+  document.getElementById("videoContainer").appendChild(iframe); // Agregar video al contenedor
+  
+  // Desplazarse al contenedor del video
+  document.getElementById("videoContainer").scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+    // Extraer el ID del video de TikTok desde el enlace
+    function getVideoId(url) {
+      var regex = /\/video\/(\d+)/;
+      var match = url.match(regex);
+      if (match) {
+        return match[1];
+      }
+      return null;
+    }
+  </script>
+</body>
+</html>

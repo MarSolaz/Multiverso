@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musiquitas</title>
+    <style>
+        body {
+            font-family: 'Clarendon';
+            text-align: center;
+            background-color: #333;
+            color: #fff;
+            padding: 40px;
+            margin: 0;
+        }
+
+        h1, h2 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        h1.neon {
+            color: #fff;
+            font-size: 48px;
+            text-align: center;
+            text-transform: uppercase;
+            animation: neon 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes neon {
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #8a2be2, 0 0 70px #8a2be2, 0 0 80px #8a2be2, 0 0 100px #8a2be2, 0 0 150px #8a2be2;
+            }
+
+            to {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #8a2be2, 0 0 35px #8a2be2, 0 0 40px #8a2be2, 0 0 50px #8a2be2, 0 0 75px #8a2be2;
+            }
+        }
+
+        .song {
+            padding: 20px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            width: 150px;
+            height: 150px;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            margin: 20px;
+            transition: transform 10s linear;
+            background: radial-gradient(circle at 270%, #6c17bb 80%, #4b0082 100%);
+        }
+
+        .song:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .song.playing {
+            transform: rotate(360deg);
+        }
+
+        h2 {
+            color: #e1d9eb;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        audio {
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.3;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 20px;
+            appearance: none;
+            background-color: transparent;
+            outline: none;
+            border: none;
+            opacity: 1; /* Ajusta la opacidad aquí */
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #8a2be2;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 4px;
+            background: linear-gradient(to right, rgba(138, 43, 226, 0.7), rgba(75, 0, 130, 0.7));
+            border-radius: 5px;
+        }
+
+        .icon {
+            font-size: 20px;
+            margin-bottom: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 10s linear;
+        }
+
+        .song.playing .icon {
+            transform: rotate(-360deg);
+            opacity: 0,5;
+        }
+
+        .song-title {
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="neon">JUKEBOX</h1>
+
+    <div class="song">
+        <h2 class="song-title">Andino</h2>
+        <audio src="andino.mp3" controls onplay="startRotation(this.parentElement)"></audio>
+        <input type="range" min="0" max="100" step="0.01" value="0" onchange="changeProgress(this)">
+    </div>
+
+    <div class="song">
+        <h2 class="song-title">Ruta Pampa</h2>
+        <audio src="ruta pampa.mp3" controls onplay="startRotation(this.parentElement)"></audio>
+        <input type="range" min="0" max="100" step="0.01" value="0" onchange="changeProgress(this)">
+    </div>
+
+    <div class="song">
+        <h2 class="song-title">Niña jugando en el jardín</h2>
+        <audio src="niña jugando en el jardín.mp3" controls onplay="startRotation(this.parentElement)"></audio>
+        <input type="range" min="0" max="100" step="0.01" value="0" onchange="changeProgress(this)">
+    </div>
+
+    <div class="song">
+        <h2 class="song-title">Arcade -mezcla-</h2>
+        <audio src="arcades.mp3" controls onplay="startRotation(this.parentElement)"></audio>
+        <input type="range" min="0" max="100" step="0.01" value="0" onchange="changeProgress(this)">
+    </div>
+
+    <div class="song">
+        <h2 class="song-title">Meritocracia -letra</h2>
+        <audio src="meritocracia.mp3" controls onplay="startRotation(this.parentElement)"></audio>
+        <input type="range" min="0" max="100" step="0.01" value="0" onchange="changeProgress(this)">
+    </div>
+    <script>
+        function startRotation(songElement) {
+            songElement.classList.add('playing');
+        }
+
+        function changeProgress(progressSlider) {
+            const audioPlayer = progressSlider.previousElementSibling;
+            audioPlayer.currentTime = (progressSlider.value * audioPlayer.duration) / 100;
+        }
+    </script>
+</body>
+
+</html>

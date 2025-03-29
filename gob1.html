@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Decisiones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Simulador de Decisiones para el Bienestar Municipal</h1>
+<div id="decisionTitle"></div>
+<div id="decisionDescription"></div>
+<div id="options"></div>
+<div id="results"></div>
+
+<script>
+    const decisions = [
+        {
+            title: "Decisión 1: ¿Cómo abordar la falta de espacios verdes?",
+            description: "La comunidad ha solicitado más áreas verdes para actividades recreativas.",
+            options: [
+                {
+                    text: "Construir un nuevo parque",
+                    results: {
+                        economy: -10,
+                        welfare: +30,
+                        environment: +40,
+                        popularity: +20
+                    }
+                },
+                {
+                    text: "Crear un programa de reforestación en áreas urbanas",
+                    results: {
+                        economy: -5,
+                        welfare: +15,
+                        environment: +50,
+                        popularity: +10
+                    }
+                },
+                {
+                    text: "Permitir la construcción de un centro comercial en la zona verde",
+                    results: {
+                        economy: +30,
+                        welfare: -10,
+                        environment: -30,
+                        popularity: -20
+                    }
+                }
+            ]
+        },
+        {
+            title: "Decisión 2: ¿Cómo mejorar el transporte público?",
+            description: "Los ciudadanos se quejan de que el transporte público es insuficiente.",
+            options: [
+                {
+                    text: "Invertir en nuevas rutas y autobuses",
+                    results: {
+                        economy: -20,
+                        welfare: +25,
+                        environment: +15,
+                        popularity: +30
+                    }
+                },
+                {
+                    text: "Promover el uso de bicicletas con carriles exclusivos",
+                    results: {
+                        economy: -10,
+                        welfare: +20,
+                        environment: +35,
+                        popularity: +25
+                    }
+                },
+                {
+                    text: "Aumentar las tarifas del transporte público",
+                    results: {
+                        economy: +15,
+                        welfare: -20,
+                        environment: 0,
+                        popularity: -25
+                    }
+                }
+            ]
+        },
+        {
+            title: "Decisión 3: ¿Cómo enfrentar el cambio climático?",
+            description: "La comunidad está preocupada por los efectos del cambio climático.",
+            options: [
+                {
+                    text: "Implementar un plan de energías renovables",
+                    results: {
+                        economy: -25,
+                        welfare: +15,
+                        environment: +50,
+                        popularity: +20
+                    }
+                },
+                {
+                    text: "Promover jardines comunitarios",
+                    results: {
+                        economy: -5,
+                        welfare: +10,
+                        environment: +30,
+                        popularity: +15
+                    }
+                },
+                {
+                    text: "Establecer un programa de reforestación",
+                    results: {
+                        economy: -10,
+                        welfare: +20,
+                        environment: +40,
+                        popularity: +10
+                    }
+                }
+            ]
+        }
+    ];
+
+    let currentDecisionIndex = 0;
+    let results = {
+        economy: 70,
+        welfare: 70,
+        environment: 70,
+        popularity: 70
+    };
+
+    function startGame() {
+        currentDecisionIndex = 0;
+        results = {
+            economy: 70,
+            welfare: 70,
+            environment: 70,
+            popularity: 70
+        };
+        showDecision();
+    }
+
+    function showDecision() {
+        const decision = decisions[currentDecisionIndex];
+        document.getElementById("decisionTitle").innerText = decision.title;
+        document.getElementById("decisionDescription").innerText = decision.description;
+        
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = ""; // Clear previous options
+
+        decision.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.innerText = option.text;
+            button.onclick = () => makeDecision(index);
+            optionsDiv.appendChild(button);
+        });
+    }
+
+    function makeDecision(optionIndex) {
+        const selectedOption = decisions[currentDecisionIndex].options[optionIndex];
+        
+        // Update results
+        results.economy += selectedOption.results.economy;
+        results.welfare += selectedOption.results.welfare;
+        results.environment += selectedOption.results.environment;
+        results.popularity += selectedOption.results.popularity;
+
+        // Show impact of the decision
+        showImpact(selectedOption.results);
+        
+        currentDecisionIndex++;
+        if (currentDecisionIndex < decisions.length) {
+            showDecision();
+        } else {
+            showResults();
+        }
+    }
+
+    function showImpact(impact) {
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML += `
+            <p><strong>Impacto de la decisión:</strong></p>
+            <p>- Economía: ${impact.economy}</p>
+            <p>- Bienestar: ${impact.welfare}</p>
+            <p>- Medio Ambiente: ${impact.environment}</p>
+            <p>- Popularidad: ${impact.popularity}</p>
+        `;
+    }
+
+    function showResults() {
+        document.getElementById("decisionTitle").innerText = "Resultados Finales";
+        document.getElementById("decisionDescription").innerText = "";
+
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = `
+            <p><strong>Resultados Totales:</strong></p>
+            <p><strong>Economía:</strong> ${results.economy}</p>
+            <p><strong>Bienestar:</strong> ${results.welfare}</p>
+            <p><strong>Medio Ambiente:</strong> ${results.environment}</p>
+            <p><strong>Popularidad:</strong> ${results.popularity}</p>
+        `;
+        
+        const restartButton = document.createElement("button");
+        restartButton.innerText = "JUGAR DE NUEVO";
+        restartButton.onclick = startGame;
+        resultsDiv.appendChild(restartButton);
+        
+        document.getElementById("options").innerHTML = ""; // Clear previous options
+    }
+
+    startGame(); // Start the game on load
+</script>
+
+</body>
+</html>
