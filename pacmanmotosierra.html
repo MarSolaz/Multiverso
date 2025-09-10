@@ -110,8 +110,8 @@
     heartImg.src = "heart.png";
 
     var CHARACTER_SIZE = 50;
-    var PACMAN_SPEED = 15;
-    var ENEMY_SPEED = 2;
+    var PACMAN_SPEED = 15;   // Pac-Man más rápido
+    var ENEMY_SPEED = 3;     // motosierra equilibrada
 
     var pacman = { x: 200, y: 200, lives: 3 };
     var motosierra = { x: 50, y: 50 };
@@ -143,20 +143,20 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       ctx.drawImage(pacmanImg, pacman.x, pacman.y, CHARACTER_SIZE, CHARACTER_SIZE);
-      ctx.drawImage(motosierraImg, motosierra.x, motosierra.y, CHARACTER_SIZE * 2, CHARACTER_SIZE * 2);
+      ctx.drawImage(motosierraImg, motosierra.x, motosierra.y, CHARACTER_SIZE*2, CHARACTER_SIZE*2);
 
       books.forEach(function(book) {
         if (!book.eaten) ctx.drawImage(bookImg, book.x, book.y, CHARACTER_SIZE, CHARACTER_SIZE);
       });
 
       for (var i = 0; i < pacman.lives; i++) {
-        ctx.drawImage(heartImg, i * CHARACTER_SIZE, 0, CHARACTER_SIZE, CHARACTER_SIZE);
+        ctx.drawImage(heartImg, i*CHARACTER_SIZE, 0, CHARACTER_SIZE, CHARACTER_SIZE);
       }
 
       if (pacman.lives <= 0) {
         ctx.font = "40px Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("¡AFUEeeRAaa!", canvas.width / 2 - 100, canvas.height / 2);
+        ctx.fillText("¡AFUEeeRAaa!", canvas.width/2 - 100, canvas.height/2);
         document.getElementById("restartButton").style.display = "block";
       }
     }
@@ -166,6 +166,10 @@
       if (direction === "right") pacman.x += PACMAN_SPEED;
       if (direction === "up") pacman.y -= PACMAN_SPEED;
       if (direction === "down") pacman.y += PACMAN_SPEED;
+
+      // Limitar dentro del canvas
+      pacman.x = Math.max(0, Math.min(canvas.width - CHARACTER_SIZE, pacman.x));
+      pacman.y = Math.max(0, Math.min(canvas.height - CHARACTER_SIZE, pacman.y));
 
       checkCollisions();
       draw();
@@ -194,9 +198,13 @@
     function updateMotosierra() {
       motosierra.x += (pacman.x < motosierra.x ? -ENEMY_SPEED : ENEMY_SPEED);
       motosierra.y += (pacman.y < motosierra.y ? -ENEMY_SPEED : ENEMY_SPEED);
+
+      // Limitar dentro del canvas
+      motosierra.x = Math.max(0, Math.min(canvas.width - CHARACTER_SIZE*2, motosierra.x));
+      motosierra.y = Math.max(0, Math.min(canvas.height - CHARACTER_SIZE*2, motosierra.y));
     }
 
-    // Controles por teclado
+    // Controles teclado
     document.addEventListener("keydown", function(e) {
       if (e.key === "ArrowLeft") movePacman("left");
       if (e.key === "ArrowRight") movePacman("right");
@@ -204,11 +212,16 @@
       if (e.key === "ArrowDown") movePacman("down");
     });
 
-    // Controles por botones móviles
+    // Controles móviles continuos
+    var mobileDirection = null;
     document.querySelectorAll(".control-btn").forEach(btn => {
       btn.addEventListener("touchstart", e => {
         e.preventDefault();
-        movePacman(btn.dataset.dir);
+        mobileDirection = btn.dataset.dir;
+      });
+      btn.addEventListener("touchend", e => {
+        e.preventDefault();
+        mobileDirection = null;
       });
     });
 
@@ -220,8 +233,8 @@
       books = [];
       for (var i = 0; i < 15; i++) {
         books.push({
-          x: Math.random() * (canvas.width - CHARACTER_SIZE),
-          y: Math.random() * (canvas.height - CHARACTER_SIZE),
+          x: Math.random()*(canvas.width-CHARACTER_SIZE),
+          y: Math.random()*(canvas.height-CHARACTER_SIZE),
           eaten: false
         });
       }
@@ -230,6 +243,9 @@
     }
 
     function gameLoop() {
+      // mover Pac-Man según botón móvil
+      if (mobileDirection) movePacman(mobileDirection);
+
       updateMotosierra();
       checkCollisions();
       draw();
@@ -240,4 +256,5 @@
   </script>
 </body>
 </html>
+
 
