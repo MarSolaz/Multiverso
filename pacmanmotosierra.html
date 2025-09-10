@@ -102,14 +102,10 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 // Imágenes
-const pacmanImg = new Image();
-pacmanImg.src = "pacman2.png";
-const motosierraImg = new Image();
-motosierraImg.src = "motosierra.png";
-const bookImg = new Image();
-bookImg.src = "hoja.png";
-const heartImg = new Image();
-heartImg.src = "heart.png";
+const pacmanImg = new Image(); pacmanImg.src = "pacman2.png";
+const motosierraImg = new Image(); motosierraImg.src = "motosierra.png";
+const bookImg = new Image(); bookImg.src = "hoja.png";
+const heartImg = new Image(); heartImg.src = "heart.png";
 
 // Tamaños y velocidades
 const ORIGINAL_WIDTH = 600;
@@ -175,7 +171,6 @@ function movePacman(direction) {
   if (direction==="up") pacman.y -= PACMAN_SPEED;
   if (direction==="down") pacman.y += PACMAN_SPEED;
 
-  // Limitar dentro del canvas
   pacman.x = Math.max(0, Math.min(ORIGINAL_WIDTH - CHARACTER_SIZE, pacman.x));
   pacman.y = Math.max(0, Math.min(ORIGINAL_HEIGHT - CHARACTER_SIZE, pacman.y));
 
@@ -190,17 +185,14 @@ function checkCollisions() {
       showDefeat();
       return;
     }
-    pacman.x = 200;
-    pacman.y = 200;
+    pacman.x = 200; pacman.y = 200;
   }
 
   books.forEach(b => {
     if (!b.eaten && isCollision(pacman, b)) b.eaten = true;
   });
 
-  // VERIFICAR VICTORIA
-  const allEaten = books.every(b => b.eaten);
-  if (allEaten) showVictory();
+  if (books.every(b => b.eaten)) showVictory();
 }
 
 function isCollision(obj1, obj2) {
@@ -250,16 +242,18 @@ function restartGame() {
                  eaten:false });
   }
   document.getElementById("restartButton").style.display = "none";
-  gameLoop(); // reinicia loop si estaba detenido
+  gameLoop(); 
 }
 
-// Mensajes de victoria y derrota
+// Mensajes de victoria y derrota (ajuste para móviles)
 let gameLoopId;
 function showVictory() {
+  ctx.setTransform(1,0,0,1,0,0); // reset escala
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.font = `${40*scale}px Arial`;
   ctx.fillStyle = "green";
   ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
   ctx.fillText("🎉 FELICIDADES, LO LOGRASTE! 🎉", canvas.width/2, canvas.height/2);
   mobileDirection = null;
   document.getElementById("restartButton").style.display = "block";
@@ -267,10 +261,12 @@ function showVictory() {
 }
 
 function showDefeat() {
+  ctx.setTransform(1,0,0,1,0,0); // reset escala
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.font = `${40*scale}px Arial`;
   ctx.fillStyle = "red";
   ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
   ctx.fillText("¡AFUEeeRAaa!", canvas.width/2, canvas.height/2);
   mobileDirection = null;
   document.getElementById("restartButton").style.display = "block";
@@ -288,3 +284,4 @@ gameLoop();
 </script>
 </body>
 </html>
+
